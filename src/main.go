@@ -9,7 +9,7 @@ import (
 )
 
 const (
-	VERSION   = "0.1 - TESTING"
+	VERSION   = "0.1b"
 	USERAGENT = "RELI5 BOT version: " + VERSION + ". A bot that does stuff for /r/explainlikeimfive/ created by /u/jonas747"
 )
 
@@ -41,14 +41,21 @@ func Loop(config *GeneralConfig, storage []string, account *reddit.Account) {
 	after := ""
 	afterTime := 0
 	ticker := time.NewTicker(time.Duration(config.RefreshInterval) * time.Second)
-	fmt.Println("comments: ", config.Comments)
+	fmt.Println("comments: ", config.Comments, "; refreshinterval: ", config.RefreshInterval)
 	for {
 		<-ticker.C
-		//fmt.Println("Ticked!")
+
+		locafter := after
+		locafterTime := afterTime
+
+		fmt.Println("Ticked!")
+		///////////////////////////
+		// Gets the recent comments, checks parent and send a message is neceseraarry
+		//////////////////////////
 		var json simplejson.Json
 		var err error
 		if after != "" {
-			json, err = reddit.Get("http://www.reddit.com/r/"+config.Subreddit+"/comments.json", USERAGENT, url.Values{"after": {after}, "count": {"100"}}, nil)
+			json, err = reddit.Get("http://www.reddit.com/r/"+config.Subreddit+"/comments.json", USERAGENT, url.Values{"count": {"100"}}, nil)
 
 		} else {
 			json, err = reddit.Get("http://www.reddit.com/r/"+config.Subreddit+"/comments.json", USERAGENT, url.Values{"count": {"100"}}, nil)
@@ -62,12 +69,11 @@ func Loop(config *GeneralConfig, storage []string, account *reddit.Account) {
 			fmt.Println(err)
 			return
 		}
-		for _, p := range posts {
-
-			///////////////////////////
-			// Gets the recent comments, checks parent and send a message is neceseraarry
-			//////////////////////////
-			rpost, err := reddit.GetPostFromId(p.LinkId, USERAGENT)
+		for _, comment := range posts {
+			if comment.Created <= afterTime {
+				continue
+			}
+			rpost, err := reddit.GetPostFromId(comment.LinkId, USERAGENT)
 			if err != nil {
 				fmt.Println(err)
 				continue
@@ -75,7 +81,7 @@ func Loop(config *GeneralConfig, storage []string, account *reddit.Account) {
 			if rpost.Comments >= config.Comments && rpost.FlairText == "" {
 				found := false
 				for _, val := range storage {
-					if val == p.LinkId {
+					if val == comment.LinkId {
 						found = true
 						break
 					}
@@ -87,16 +93,19 @@ func Loop(config *GeneralConfig, storage []string, account *reddit.Account) {
 					message := fmt.Sprintf(config.Message, rpost.Title, fmt.Sprintf("http://www.reddit.com/r/%s/comments/%s/", config.Subreddit, rpost.FullName[3:]), link, link, modMLink)
 					account.Compose("Have your ELI5 post been answered?", message, rpost.Author)
 					fmt.Println("Sending message to ", rpost.Author, "; Titled: ", rpost.Title)
-					storage = append(storage, p.LinkId)
+					storage = append(storage, comment.LinkId)
 					SaveStorage(&storage)
 				}
 			}
-			if rpost.Created > afterTime {
-				after = p.LinkId
-				afterTime = rpost.Created
+			if comment.Created > locafterTime {
+				locafter = comment.FullName
+				locafterTime = comment.Created
 			}
 
 		}
+
+		afterTime = locafterTime
+		after = locafter
 		///////////////////////
 		// Checks inbox and flairs if command is sent
 		//////////////////////
@@ -127,7 +136,6 @@ func Loop(config *GeneralConfig, storage []string, account *reddit.Account) {
 					fmt.Println("Post is already flaired, not flairing")
 					continue
 				}
-				fmt.Println(p.Title)
 				err = account.FlairPost(body, config.FlairTemplate, config.FlairText)
 				if err != nil {
 					fmt.Println(err)
