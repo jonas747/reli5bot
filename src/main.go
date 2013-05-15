@@ -48,7 +48,7 @@ func Loop(config *GeneralConfig, storage []string, account *reddit.Account) {
 		locafter := after
 		locafterTime := afterTime
 
-		fmt.Println("Ticked!")
+		//fmt.Println("Ticked!")
 		///////////////////////////
 		// Gets the recent comments, checks parent and send a message is neceseraarry
 		//////////////////////////
