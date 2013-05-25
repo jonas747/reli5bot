@@ -16,6 +16,7 @@ type GeneralConfig struct {
 	FlairTemplate   string `json:"flair_template_id"`
 	FlairText       string `json:"flair_text"`
 	Message         string `json:"message"`
+	MessageSubject  string `json:"messagesubject"`
 }
 
 func LoadGeneralConfig() (*GeneralConfig, error) {
