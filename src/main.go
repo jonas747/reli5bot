@@ -39,11 +39,13 @@ func main() {
 func Loop(config *GeneralConfig, storage []string, account *reddit.Account) {
 	log.Println("comments: ", config.Comments, "; refreshinterval: ", config.RefreshInterval)
 
+	//The reason config.refreshinterval is only used in comment stream is because you dont need to it inbox
+	//stream since most likely you wont get 100 messages a minute
 	cStream := &reddit.CommentStream{
 		Update:        make(chan reddit.Comment),
 		Stop:          make(chan string),
 		Errors:        make(chan error),
-		FetchInterval: time.Duration(60) * time.Second,
+		FetchInterval: time.Duration(config.RefreshInterval) * time.Second,
 		Subreddit:     config.Subreddit,
 		RAccount:      account,
 		CheckInterval: time.Duration(60) * time.Second,
