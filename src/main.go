@@ -61,10 +61,6 @@ func Loop(config *GeneralConfig, storage []string, account *reddit.Account) {
 	go inboxStream.Run()
 
 	for {
-		//log.Println("Ticked!")
-		///////////////////////////
-		// Gets the recent comments, checks parent and send a message is neceseraarry
-		//////////////////////////
 		select {
 		case comment := <-cStream.Update:
 			rpost, err := reddit.GetPostFromId(comment.LinkId, USERAGENT)
