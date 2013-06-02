@@ -43,7 +43,7 @@ func Loop(config *GeneralConfig, storage []string, account *reddit.Account) {
 	//stream since most likely you wont get 100 messages a minute
 	cStream := &reddit.CommentStream{
 		Update:        make(chan reddit.Comment),
-		Stop:          make(chan string),
+		Stop:          make(chan bool),
 		Errors:        make(chan error),
 		FetchInterval: time.Duration(config.RefreshInterval) * time.Second,
 		Subreddit:     config.Subreddit,
