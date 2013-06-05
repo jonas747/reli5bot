@@ -48,7 +48,6 @@ func Loop(config *GeneralConfig, storage []string, account *reddit.Account) {
 		FetchInterval: time.Duration(config.RefreshInterval) * time.Second,
 		Subreddit:     config.Subreddit,
 		RAccount:      account,
-		CheckInterval: time.Duration(60) * time.Second,
 	}
 	go cStream.Run()
 
