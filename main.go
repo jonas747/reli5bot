@@ -8,7 +8,7 @@ import (
 )
 
 const (
-	VERSION   = "1.1"
+	VERSION   = "1.2"
 	USERAGENT = "RELI5 BOT version: " + VERSION + ". A bot that does stuff for /r/explainlikeimfive/ created by /u/jonas747"
 )
 
@@ -91,7 +91,7 @@ func Loop(config *GeneralConfig, storage []string, account *reddit.Account) {
 		case cErr := <-cStream.Errors:
 			log.Println(cErr)
 			if cErr == reddit.ERRCOMMENTSVOID {
-				//Shutdown and restart it
+				log.Println("Restarting")
 				return
 			}
 		case message := <-inboxStream.Update:
