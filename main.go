@@ -90,6 +90,10 @@ func Loop(config *GeneralConfig, storage []string, account *reddit.Account) {
 			}
 		case cErr := <-cStream.Errors:
 			log.Println(cErr)
+			if cErr == reddit.ERRCOMMENTSVOID {
+				//Shutdown and restart it
+				return
+			}
 		case message := <-inboxStream.Update:
 			err := account.MarkMessageAsRead(message.FullName)
 			if err != nil {
