@@ -1,0 +1,11 @@
+{
+	"username": "explainlikeimfivebot",
+	"password": "*",
+	"subreddit": "explainlikeimfive",
+	"refreshinterval": 15,
+	"comments": 15,
+	"flair_template_id": "1cf158fa-dd0b-11e1-805c-12313b0ce1e2",
+	"flair_text": "Answered",
+	"message": "Your post on /r/{{.Config.Subreddit}}, [{{.Post.Data.Title}}](http://www.reddit.com/r/{{.Config.Subreddit}}/comments/{{.Post.Data.Id}}), has received many responses. If you feel that your question has been adequately explained, click [here](http://www.reddit.com/message/compose/?to={{.Config.Username}}&subject=flair&message={{.Post.Data.Name}}) and hit \"send\" to mark it as explained or do it manually.\n\n **I am a bot. Please do not respond to me other than through the [mark answered](http://www.reddit.com/message/compose/?to={{.Config.Username}}&subject=flair&message={{.Post.Data.Name}}) link above.** \n\n If you wish to communicate with the ELI5 moderators, [click here](http://www.reddit.com/message/compose/?to=/r/{{.Config.Subreddit}}).",
+	"messagesubject": "Has your ELI5 post been answered?"
+}
