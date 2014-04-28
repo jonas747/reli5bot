@@ -1,7 +1,6 @@
 package main
 
 import (
-	//"fmt"
 	"bytes"
 	"github.com/jonas747/reddit"
 	"log"
@@ -10,7 +9,7 @@ import (
 )
 
 const (
-	VERSION   = "1.2"
+	VERSION   = "1.3"
 	USERAGENT = "RELI5 BOT version: " + VERSION + ". A bot that does stuff for /r/explainlikeimfive/ created by /u/jonas747"
 )
 
