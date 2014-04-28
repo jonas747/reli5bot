@@ -72,7 +72,7 @@ func Loop(config *GeneralConfig, storage []string) {
 		Update:        make(chan reddit.Thing),
 		Stop:          make(chan bool),
 		Errors:        make(chan error),
-		FetchInterval: time.Duration(5) * time.Second,
+		FetchInterval: time.Duration(60) * time.Second,
 		Account:       account,
 	}
 
